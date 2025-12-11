@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-CORE_APPS = []
+CORE_APPS = [
+    "core.users.apps.UsersConfig",
+]
 INSTALLED_APPS += CORE_APPS
 
 MIDDLEWARE = [
