@@ -19,7 +19,7 @@ from core.utils import permissions
 
 
 @extend_schema(tags=["User"])
-class UserViewSet(viewsets.ViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects
     serializer_class = AuthSerializer
 
@@ -174,18 +174,17 @@ class AuthViewSet(viewsets.ViewSet):
 
 
 @extend_schema(tags=["Organization"])
-class OrganizationViewSet(viewsets.ViewSet):
+class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects
 
     def get_permissions(self):
         if self.action == "create":
-            return [
-                IsAuthenticated() + 
+            return super().get_permissions() + [
                 permissions.IsAccountType.IsOrganizationAccount()
             ]
         if self.action in ["retrieve", "partial_update"]:
-            return [
-                IsAuthenticated() + permissions.IsObjOwner()
+            return super().get_permissions() + [
+                permissions.IsObjOwner()
             ]
         return super().get_permissions()
 

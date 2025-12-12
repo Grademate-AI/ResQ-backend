@@ -24,4 +24,5 @@ urlpatterns = [
         name="redoc",
     ),
     path("api/", include("core.users.urls")),
+    path("api/", include("core.issues.urls")),
 ]

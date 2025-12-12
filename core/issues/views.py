@@ -4,15 +4,15 @@ from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 
-from core.issues.models import Issue, VolunteerAction
-from core.issues.serializers import IssueSerializer, VolunteerActionSerializer
+from core.issues.models import Issue
+from core.issues.serializers import IssueSerializer
 # from core.rewards.services import RewardEngine
 from core.utils import enums, exceptions
 from core.utils import permissions
 
 
-@extend_schema(tags=["issues"])
-class IssueViewSet(viewsets.ViewSet):
+@extend_schema(tags=["Issues"])
+class IssueViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
@@ -41,7 +41,6 @@ class IssueViewSet(viewsets.ViewSet):
         return Issue.objects.filter(user=request.user)
 
  
-
     @extend_schema(
         description="Create a new issue.",
         request=IssueSerializer.IssueCreate,

@@ -97,7 +97,7 @@ class OrganizationSerializer:
         other = serializers.CharField(required=False, allow_blank=True)
         class Meta:
             model = Organization
-            fields = ["name", "org_type", "issue_interests"]
+            fields = ["name", "org_type", "issue_interests", "other"]
 
         def create(self, validated_data):
             request = self.context.get("request")
