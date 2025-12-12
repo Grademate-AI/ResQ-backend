@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from drf_spectacular.utils import extend_schema
 
 from core.rescue.models import RescueStation
-from core.rescue.serializers import RescueStationSerializer, StationJoinSerializer
+from core.rescue.serializers import RescueStationSerializer
 from core.utils import exceptions, enums, permissions
 
 
