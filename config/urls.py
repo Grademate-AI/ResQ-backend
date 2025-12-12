@@ -8,6 +8,7 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,3 +26,8 @@ urlpatterns = [
     path("api/", include("core.users.urls")),
 ]
 
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ]
