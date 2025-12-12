@@ -133,7 +133,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.AnonRateThrottle"],
     "DEFAULT_THROTTLE_RATES": {"anon": "50/minute"},
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "EXCEPTION_HANDLER": "core.utils.exceptions.custom_exception_handler",
+    "EXCEPTION_HANDLER": "core.utils.exceptions.exceptions.custom_exception_handler",
 }
 
 SPECTACULAR_SETTINGS = {
