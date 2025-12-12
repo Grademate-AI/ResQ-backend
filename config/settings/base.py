@@ -169,15 +169,15 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
-REDIS_HOST = env.str("REDIS_HOST", default="localhost")
-REDIS_PORT = env.int("REDIS_PORT", default=6379)
+# REDIS_HOST = env.str("REDIS_HOST", default="localhost")
+# REDIS_PORT = env.int("REDIS_PORT", default=6379)
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
+#     }
+# }
 
 if USING_MANAGED_STORAGE:
     STORAGES = {
