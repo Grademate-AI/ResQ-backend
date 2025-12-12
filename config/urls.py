@@ -25,4 +25,5 @@ urlpatterns = [
     ),
     path("api/", include("core.users.urls")),
     path("api/", include("core.issues.urls")),
+    path("api/", include("core.rescue.urls")),
 ]

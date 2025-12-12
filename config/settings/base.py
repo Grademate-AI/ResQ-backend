@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 CORE_APPS = [
     "core.users.apps.UsersConfig",
     "core.issues.apps.IssuesConfig",
+    "core.rescue.apps.RescueConfig",
 ]
 INSTALLED_APPS += CORE_APPS
 

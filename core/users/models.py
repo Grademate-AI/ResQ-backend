@@ -131,7 +131,7 @@ class Organization(mixins.BaseModelMixin):
         default=enums.OrganizationType.OTHER.value
     )
     issue_interests = models.JSONField(default=list, blank=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_organizations')
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='owned_organization')
 
     class Meta:
         verbose_name = _("Organization")
