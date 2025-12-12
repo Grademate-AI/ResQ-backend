@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
-from core.users.models import User
+from core.users.models import User, Organization
 from core.utils import enums
 
 
@@ -10,13 +10,13 @@ class BaseUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "id", 
-            "first_name", 
-            "last_name", 
-            "username"
-            "email", 
-            "account_type", 
-            "wallet_address"
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "account_type",
+            "wallet_address",
         ]
 
 
@@ -42,7 +42,7 @@ class UserSerializer:
                 "email",
                 "first_name",
                 "last_name",
-                "username"
+                "username",
                 "account_type",
                 "wallet_address",
                 "password",
@@ -90,4 +90,35 @@ class AuthSerializer:
 
     class Logout(serializers.Serializer):
         refresh = serializers.CharField()
+
+
+class OrganizationSerializer:
+    class OrganizationCreate(serializers.ModelSerializer):
+        other = serializers.CharField(required=False, allow_blank=True)
+        class Meta:
+            model = Organization
+            fields = ["name", "org_type", "issue_interests"]
+
+        def create(self, validated_data):
+            request = self.context.get("request")
+            other = validated_data.pop("other", "")
+            if validated_data["org_type"] == enums.OrganizationType.OTHER.value():
+                validated_data["org_type"] = other
+            org = Organization.objects.create(owner=request.user, **validated_data)
+            request.user.account_type = enums.UserAccountType.ORGANIZATION.value
+            request.user.organization = org
+            request.user.save(update_fields=["account_type", "organization", "date_last_modified"])
+            return org
+
+    class OrganizationRetrieve(serializers.ModelSerializer):
+        owner = BaseUserSerializer(read_only=True)
+
+        class Meta:
+            model = Organization
+            fields = "__all__"
+
+    class OrganizationUpdate(serializers.ModelSerializer):
+        class Meta:
+            model = Organization
+            fields = ["name", "org_type", "issue_interests"]
 

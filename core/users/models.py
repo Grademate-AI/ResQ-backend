@@ -121,3 +121,22 @@ class UserSession(mixins.BaseModelMixin):
     def __str__(self):
         return f"{self.user.email} - {self.ip_address}"
 
+
+class Organization(mixins.BaseModelMixin):
+    name = models.CharField(max_length=255)
+    org_type = models.CharField(
+        _("Organization Type"),
+        max_length=50,
+        choices=enums.OrganizationType.choices(),
+        default=enums.OrganizationType.OTHER.value
+    )
+    issue_interests = models.JSONField(default=list, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_organizations')
+
+    class Meta:
+        verbose_name = _("Organization")
+        verbose_name_plural = _("Organizations")
+
+    def __str__(self):
+        return f"{self.name} ({self.org_type})"
+

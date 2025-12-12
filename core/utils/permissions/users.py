@@ -42,25 +42,25 @@ class IsAccountType:
                 request.user.account_type == enums.UserAccountType.VOLUNTEER.value
             )
 
-    class IsNGOAccount(BasePermission):
+    class IsOrganizationAccount(BasePermission):
         """
-        Allows access only to NGOs.
+        Allows access only to Organizations.
         """
 
         message: str
 
         def has_permission(self, request, view):
-            self.message = "You are not an NGO!"
+            self.message = "You are not an organization!"
             return (
-                request.user.account_type == enums.UserAccountType.NGO.value
+                request.user.account_type == enums.UserAccountType.ORGANIZATION.value
             )
 
          
-    class IsSuperAdminOrNGO(BasePermission):
+    class IsSuperAdminOrOrganization(BasePermission):
         def has_permission(self, request, view):
             return (
                 IsAccountType.SuperAdminUser().has_permission(request, view)
-                or IsAccountType.IsNGOAccount().has_permission(request, view)
+                or IsAccountType.IsOrganizationAccount().has_permission(request, view)
             )
         
 

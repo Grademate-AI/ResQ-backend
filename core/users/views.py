@@ -7,7 +7,13 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 
 from core.users.models import User, UserSession
-from core.users.serializers import UserSerializer, AuthSerializer, TokenSerializer
+from core.users.serializers import (
+    UserSerializer, 
+    AuthSerializer, 
+    TokenSerializer, 
+    OrganizationSerializer
+)
+from core.users.models import Organization
 from core.utils import exceptions
 from core.utils import permissions
 
@@ -165,4 +171,32 @@ class AuthViewSet(viewsets.ViewSet):
                 message="Session not found. Please login again.",
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
+
+
+@extend_schema(tags=["Organization"])
+class OrganizationViewSet(viewsets.ViewSet):
+    queryset = Organization.objects
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [
+                IsAuthenticated() + 
+                permissions.IsAccountType.IsOrganizationAccount()
+            ]
+        if self.action in ["retrieve", "partial_update"]:
+            return [
+                IsAuthenticated() + permissions.IsObjOwner()
+            ]
+        return super().get_permissions()
+
+    @extend_schema(
+        request=OrganizationSerializer.OrganizationCreate,
+        responses={201: OrganizationSerializer.OrganizationRetrieve},
+    )
+    def create(self, request):
+        serializer = OrganizationSerializer.OrganizationCreate(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        org = serializer.save()
+        return response.Response(OrganizationSerializer.OrganizationRetrieve(org).data, status=status.HTTP_201_CREATED)
+
 
