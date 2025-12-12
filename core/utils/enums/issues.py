@@ -24,3 +24,9 @@ class IssueCategory(BaseEnum):
     CIVIC = "civic"
     ENVIRONMENTAL = "environmental"
     OTHER = "other"
+
+
+class ProofOfHelpStatus(BaseEnum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
