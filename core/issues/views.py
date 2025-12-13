@@ -90,7 +90,11 @@ class ProofOfHelpViewSet(viewsets.ModelViewSet):
             return qs.filter(issue__station_id=station_id)
         return qs.none()
 
-    @extend_schema(description="Moderator/Owner verifies a proof and triggers on-chain record.", request=None, responses={200: ProofOfHelpSerializer.Retrieve})
+    @extend_schema(
+        description="Moderator/Owner verifies a proof and triggers on-chain record.", 
+        request=None, 
+        responses={200: ProofOfHelpSerializer.ProofRetrieve}
+    )
     @action(detail=True, methods=["post"], url_path="verify")
     def verify(self, request, pk=None):
         proof = get_object_or_404(ProofOfHelp, id=pk)
@@ -106,11 +110,10 @@ class ProofOfHelpViewSet(viewsets.ModelViewSet):
         volunteer_wallet = getattr(proof.volunteer, "wallet_address", None) or ""
         tx_hash = client.record_help(issue_id=issue.id, volunteer_address=volunteer_wallet, station_id=station.id, proof_hash=proof.proof_hash, points=int(points))
         proof.status = enums.ProofOfHelpStatus.APPROVED.value
-        proof.verified_by = request.user
         proof.verified_at = timezone.now()
         proof.tx_hash = tx_hash
         proof.save(update_fields=["status", "verified_by", "verified_at", "tx_hash", "date_last_modified"])
-        return response.Response(ProofOfHelpSerializer.Retrieve(proof).data, status=status.HTTP_200_OK)
+        return response.Response(ProofOfHelpSerializer.ProofRetrieve(proof).data, status=status.HTTP_200_OK)
 
 
 
