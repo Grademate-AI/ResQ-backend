@@ -56,10 +56,6 @@ class IssueSerializer:
             model = Issue
             fields = ["status", "assigned_volunteer", "attachments", "metadata"]
 
-        def validate_status(self, value):
-            if value not in enums.IssueStatus.choices():
-                raise serializers.ValidationError("Invalid status")
-            return value
 
 
 class ProofOfHelpSerializer:

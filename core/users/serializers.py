@@ -49,10 +49,6 @@ class UserSerializer:
                 "password2",
             ]
 
-        def validate_account_type(self, value):
-            if value not in enums.UserAccountType.choices():
-                raise serializers.ValidationError("Invalid account type")
-            return value
 
         def validate(self, attrs):
             password = attrs.get("password")
@@ -102,7 +98,7 @@ class OrganizationSerializer:
         def create(self, validated_data):
             request = self.context.get("request")
             other = validated_data.pop("other", "")
-            if validated_data["org_type"] == enums.OrganizationType.OTHER.value():
+            if validated_data["org_type"] == enums.OrganizationType.OTHER.value:
                 validated_data["org_type"] = other
             org = Organization.objects.create(owner=request.user, **validated_data)
             request.user.account_type = enums.UserAccountType.ORGANIZATION.value
