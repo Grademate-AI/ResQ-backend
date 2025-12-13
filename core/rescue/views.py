@@ -13,6 +13,7 @@ from core.utils import exceptions, enums, permissions
 class RescueStationViewSet(viewsets.ModelViewSet):
     queryset = RescueStation.objects.all()
     permission_classes = [IsAuthenticated]
+    serializer_class = RescueStationSerializer
 
     def get_serializer_class(self):
         if self.action in ["create"]:

@@ -176,6 +176,7 @@ class AuthViewSet(viewsets.ViewSet):
 @extend_schema(tags=["Organization"])
 class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects
+    serializer_class = OrganizationSerializer.OrganizationCreate
 
     def get_permissions(self):
         if self.action == "create":
@@ -187,6 +188,13 @@ class OrganizationViewSet(viewsets.ModelViewSet):
                 permissions.IsObjOwner()
             ]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.action in ["retrieve"]:
+            return OrganizationSerializer.OrganizationRetrieve
+        if self.action in ["partial_update", "update"]:
+            return OrganizationSerializer.OrganizationUpdate
+        return super().get_serializer_class()
 
     @extend_schema(
         request=OrganizationSerializer.OrganizationCreate,

@@ -14,6 +14,7 @@ from django.utils import timezone
 
 @extend_schema(tags=["Issues"])
 class IssueViewSet(viewsets.ModelViewSet):
+    serializer_class = IssueSerializer.IssueRetrieve
     permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
@@ -29,18 +30,24 @@ class IssueViewSet(viewsets.ModelViewSet):
         
         return super().get_permissions()
 
-    def get_queryset(self, request):
-        if request.user.account_type != enums.UserAccountType.VOLUNTEER.value:
+    def get_queryset(self):
+        if self.request.user.account_type != enums.UserAccountType.VOLUNTEER.value:
             raise exceptions.CustomException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 message="Only volunteer users can access issues list",
             )
 
-        resolved = request.query_params.get("resolved")
+        resolved = self.request.query_params.get("resolved")
         if resolved:
-            return Issue.objects.filter(assigned_volunteer=request.user)
-        return Issue.objects.filter(user=request.user)
-
+            return Issue.objects.filter(assigned_volunteer=self.request.user)
+        return Issue.objects.filter(user=self.request.user)
+    
+    def get_serializer_class(self):
+        if self.action in ["create"]:
+            return IssueSerializer.IssueCreate
+        if self.action in ["update", "partial_update"]:
+            return IssueSerializer.IssueUpdate
+        return super().get_serializer_class()
  
     @extend_schema(
         description="Create a new issue.",
@@ -74,6 +81,7 @@ class IssueViewSet(viewsets.ModelViewSet):
 @extend_schema(tags=["Proofs"])
 class ProofOfHelpViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = ProofOfHelpSerializer
 
     def get_serializer_class(self):
         if self.action in ["create"]:
