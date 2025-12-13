@@ -52,7 +52,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -216,7 +215,10 @@ AI_PROVIDER = env("AI_PROVIDER", default="openai")
 OPENAI_API_KEY = env("OPENAI_API_KEY", default="")
 
 BLOCKCHAIN_RPC_URL = env("BLOCKCHAIN_RPC_URL", default="")
-BLOCKCHAIN_CONTRACT_ADDRESS = env("BLOCKCHAIN_CONTRACT_ADDRESS", default="")
+REWARD_TOKEN_ADDRESS = env("REWARD_TOKEN_ADDRESS", default="")
+SBT_ADDRESS = env("SBT_ADDRESS", default="")
+PROOF_OF_HELP_ADDRESS = env("PROOF_OF_HELP_ADDRESS", default="")
 BLOCKCHAIN_PRIVATE_KEY = env("BLOCKCHAIN_PRIVATE_KEY", default="")
 BLOCKCHAIN_NETWORK = env("BLOCKCHAIN_NETWORK", default="sepolia")
+DEPLOYER_ADDRESS = env("DEPLOYER_ADDRESS", default="")
 
