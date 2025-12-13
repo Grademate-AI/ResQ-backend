@@ -59,7 +59,7 @@ class IssueSerializer:
 
 
 class ProofOfHelpSerializer:
-    class Create(serializers.ModelSerializer):
+    class ProofCreate(serializers.ModelSerializer):
         class Meta:
             model = ProofOfHelp
             fields = ["issue", "proof_media", "notes", "points", "metadata"]
@@ -84,7 +84,7 @@ class ProofOfHelpSerializer:
             validated_data["proof_hash"] = proof_hash
             return super().create(validated_data)
 
-    class Retrieve(serializers.ModelSerializer):
+    class ProofRetrieve(serializers.ModelSerializer):
         class Meta:
             model = ProofOfHelp
             fields = "__all__"

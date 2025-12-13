@@ -77,8 +77,8 @@ class ProofOfHelpViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action in ["create"]:
-            return ProofOfHelpSerializer.Create
-        return ProofOfHelpSerializer.Retrieve
+            return ProofOfHelpSerializer.ProofCreate
+        return ProofOfHelpSerializer.ProofRetrieve
 
     def get_queryset(self):
         user = self.request.user
@@ -105,7 +105,7 @@ class ProofOfHelpViewSet(viewsets.ModelViewSet):
         client = ProofOfHelpContract()
         volunteer_wallet = getattr(proof.volunteer, "wallet_address", None) or ""
         tx_hash = client.record_help(issue_id=issue.id, volunteer_address=volunteer_wallet, station_id=station.id, proof_hash=proof.proof_hash, points=int(points))
-        proof.status = ProofOfHelp.Status.APPROVED
+        proof.status = enums.ProofOfHelpStatus.APPROVED.value
         proof.verified_by = request.user
         proof.verified_at = timezone.now()
         proof.tx_hash = tx_hash
